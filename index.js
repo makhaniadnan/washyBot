@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 const axios = require('axios')
 var port = process.env.PORT || 8080;
+var token = '236162485:AAEtw09U78v60WtzBd4Jae71U51qyvadpdI'
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
@@ -23,16 +24,16 @@ app.post('/new-message', function(req, res) {
   // If we've gotten this far, it means that we have received a message containing the word "marco".
   // Respond by hitting the telegram bot API and responding to the approprite chat_id with the word "Polo!!"
   // Remember to use your own API toked instead of the one below  "https://api.telegram.org/bot<your_api_token>/sendMessage"
-  axios.post('https://api.telegram.org/bot236162485:AAEtw09U78v60WtzBd4Jae71U51qyvadpdI/sendMessage', {
+  axios.post('https://api.telegram.org/bot' + token + '/sendMessage', {
     chat_id: message.chat.id,
     text: 'Hey...Bitch!!'
   })
-    .then(response => {
+    .then(function(response) {
       // We get here if the message was successfully posted
       console.log('Message posted')
       res.end('ok')
     })
-    .catch(err => {
+    .catch(function(err) {
       // ...and here if it was not
       console.log('Error :', err)
       res.end('Error :' + err)
