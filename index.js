@@ -1,23 +1,45 @@
-var Botkit = require('botkit')
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+const axios = require('axios')
 
-var accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN
-var verifyToken = process.env.FACEBOOK_VERIFY_TOKEN
-var port = process.env.PORT
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({
+  extended: true
+})); // for parsing application/x-www-form-urlencoded
 
-if (!accessToken) throw new Error('FACEBOOK_PAGE_ACCESS_TOKEN is required but missing')
-if (!verifyToken) throw new Error('FACEBOOK_VERIFY_TOKEN is required but missing')
-if (!port) throw new Error('PORT is required but missing')
+//This is the route the API will call
+app.post('/new-message', function(req, res) {
+  const {message} = req.body
 
-var controller = Botkit.facebookbot({
-  access_token: accessToken,
-  verify_token: verifyToken
-})
+  //Each message contains "text" and a "chat" object, which has an "id" which is the chat id
 
-var bot = controller.spawn()
+  if (!message || message.text.toLowerCase().indexOf('washy') <0) {
+    // In case a message is not present, or if our message does not have the word marco in it, do nothing and return an empty response
+    return res.end()
+  }
 
-controller.setupWebserver(port, function (err, webserver) {
-  if (err) return console.log(err)
-  controller.createWebhookEndpoints(webserver, bot, function () {
-    console.log('Ready')
+  // If we've gotten this far, it means that we have received a message containing the word "marco".
+  // Respond by hitting the telegram bot API and responding to the approprite chat_id with the word "Polo!!"
+  // Remember to use your own API toked instead of the one below  "https://api.telegram.org/bot<your_api_token>/sendMessage"
+  axios.post('https://api.telegram.org/bot236162485:AAEtw09U78v60WtzBd4Jae71U51qyvadpdI/sendMessage', {
+    chat_id: message.chat.id,
+    text: 'Hey...Bitch!!'
   })
-})
+    .then(response => {
+      // We get here if the message was successfully posted
+      console.log('Message posted')
+      res.end('ok')
+    })
+    .catch(err => {
+      // ...and here if it was not
+      console.log('Error :', err)
+      res.end('Error :' + err)
+    })
+
+});
+
+// Finally, start our server
+app.listen(3000, function() {
+  console.log('Telegram app listening on port 3000!');
+});

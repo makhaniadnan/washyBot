@@ -1,23 +1,16 @@
 {
-  "name": "washybot",
+  "name": "washy_telegram_bot",
   "version": "1.0.0",
-  "description": "A smart washybot",
+  "description": "Washy bot for telegram",
   "main": "index.js",
-  "dependencies": {
-    "botkit": "^0.4.1"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/greece57/washyBot.git"
-  },
-  "author": "",
+  "author": "Adnan Makhani",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/greece57/washyBot/issues"
-  },
-  "homepage": "https://github.com/greece57/washyBot#readme"
+  "dependencies": {
+    "axios": "^0.15.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0"
+  }
 }
